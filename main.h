@@ -25,5 +25,7 @@ void bundle_hypervectors(int *sum, const int *to_add);
 void encode_image(const MNIST_Data *image, int *H_out);
 void sign_vector(int *vector, int *signed_out);
 int predict(const MNIST_Data *image);
+int export_mnist_to_bin(const char *csv_path, const char *bin_path);
+int load_mnist_bin(const char *bin_path, MNIST_Data **data_array, int *count);
 
 #endif
