@@ -1,11 +1,13 @@
-// ft_train_model.c
-
+#include <stdio.h>
 #include "main.h"
 
-int class_vectors[10][DIMENSION]; 
+int class_vectors[10][DIMENSION];
 
 void train_model(const MNIST_Data *train_data, int train_count) {
+    printf("🛠️ Staring: train_model()...\n");
+    fflush(stdout);
 
+    // Class vektörlerini sıfırla
     for (int c = 0; c < 10; c++) {
         for (int i = 0; i < DIMENSION; i++) {
             class_vectors[c][i] = 0;
@@ -16,6 +18,9 @@ void train_model(const MNIST_Data *train_data, int train_count) {
     int H_bin[DIMENSION];
 
     for (int i = 0; i < train_count; i++) {
+        if (i % 1000 == 0)
+            printf("🔁 Training %d / %d ...\n", i, train_count);
+
         encode_image(&train_data[i], H);
         sign_vector(H, H_bin);
 
@@ -29,4 +34,7 @@ void train_model(const MNIST_Data *train_data, int train_count) {
     for (int c = 0; c < 10; c++) {
         sign_vector(class_vectors[c], class_vectors[c]);
     }
+
+    printf("✅ train_model() completed.\n");
+    fflush(stdout);
 }
