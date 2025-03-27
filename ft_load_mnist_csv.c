@@ -5,7 +5,7 @@
 #include <string.h>
 #include "main.h"
 
-#define MAX_LINE_LENGTH 1024
+#define MAX_LINE_LENGTH 8192  // 785 sayı + virgül + güvenli boşluk
 
 int load_mnist_csv(const char *filename, MNIST_Data **data_array, int *count) {
     FILE *fp = fopen(filename, "r");
@@ -16,7 +16,7 @@ int load_mnist_csv(const char *filename, MNIST_Data **data_array, int *count) {
 
     char line[MAX_LINE_LENGTH];
     int row = 0;
-    int capacity = 1000; // initial allocation
+    int capacity = 1000;
     *data_array = malloc(capacity * sizeof(MNIST_Data));
     if (!*data_array) {
         perror("Memory allocation failed");
@@ -25,6 +25,12 @@ int load_mnist_csv(const char *filename, MNIST_Data **data_array, int *count) {
     }
 
     while (fgets(line, sizeof(line), fp)) {
+        // Satır sonundaki newline'ı temizle
+        size_t len = strlen(line);
+        if (len > 0 && line[len - 1] == '\n') {
+            line[len - 1] = '\0';
+        }
+
         if (row >= capacity) {
             capacity *= 2;
             *data_array = realloc(*data_array, capacity * sizeof(MNIST_Data));
@@ -35,17 +41,23 @@ int load_mnist_csv(const char *filename, MNIST_Data **data_array, int *count) {
             }
         }
 
+        // Label al
         char *token = strtok(line, ",");
         if (token == NULL) continue;
 
-        (*data_array)[row].label = atoi(token);
+        int label = atoi(token);
+        if (label < 0 || label > 9) {
+            fprintf(stderr, "⚠️ Warning: Unexpected label %d at row %d\n", label, row);
+        }
+        (*data_array)[row].label = label;
 
+        // Piksel verilerini oku
         for (int i = 0; i < 784; i++) {
             token = strtok(NULL, ",");
             if (token) {
                 (*data_array)[row].pixels[i] = atoi(token);
             } else {
-                (*data_array)[row].pixels[i] = 0;
+                (*data_array)[row].pixels[i] = 0; // eksikse sıfırla
             }
         }
 
