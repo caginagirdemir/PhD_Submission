@@ -29,11 +29,10 @@ int main() {
     }
     printf("Loaded %d test samples.\n", test_count);
 
-    // HDC yapılarını oluştur
     generate_position_hypervectors();
     generate_level_hypervectors();
     printf("passed.\n");
-    // Modeli eğit
+    
     train_model(train_data, train_count);
     printf("passed.\n");
     printf("Label 0 vector sample:\n");
