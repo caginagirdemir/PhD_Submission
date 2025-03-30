@@ -5,7 +5,7 @@
 #include <string.h>
 #include "main.h"
 
-#define MAX_LINE_LENGTH 8192  // 785 sayı + virgül + güvenli boşluk
+#define MAX_LINE_LENGTH 8192  // 785 + comma + safe space
 
 int load_mnist_csv(const char *filename, MNIST_Data **data_array, int *count) {
     FILE *fp = fopen(filename, "r");
@@ -25,7 +25,7 @@ int load_mnist_csv(const char *filename, MNIST_Data **data_array, int *count) {
     }
 
     while (fgets(line, sizeof(line), fp)) {
-        // Satır sonundaki newline'ı temizle
+        // delete last new line
         size_t len = strlen(line);
         if (len > 0 && line[len - 1] == '\n') {
             line[len - 1] = '\0';
@@ -41,7 +41,6 @@ int load_mnist_csv(const char *filename, MNIST_Data **data_array, int *count) {
             }
         }
 
-        // Label al
         char *token = strtok(line, ",");
         if (token == NULL) continue;
 
@@ -51,13 +50,12 @@ int load_mnist_csv(const char *filename, MNIST_Data **data_array, int *count) {
         }
         (*data_array)[row].label = label;
 
-        // Piksel verilerini oku
         for (int i = 0; i < 784; i++) {
             token = strtok(NULL, ",");
             if (token) {
                 (*data_array)[row].pixels[i] = atoi(token);
             } else {
-                (*data_array)[row].pixels[i] = 0; // eksikse sıfırla
+                (*data_array)[row].pixels[i] = 0;
             }
         }
 

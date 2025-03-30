@@ -19,7 +19,7 @@ int main() {
         return 1;
     }
 
-    printf("Loaded %d training samples.\n", train_count);
+    printf("Loading %d training samples.\n", train_count);
 
     generate_level_hypervectors();
 

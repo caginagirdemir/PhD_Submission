@@ -22,8 +22,11 @@ void encode_image(const MNIST_Data *image, int *H_out) {
 
     int temp[DIMENSION];
 
+    //768 pixel MNIST -> 28X28
+    //i -> pixel number
     for (int i = 0; i < WIDTH * HEIGHT; i++) {
-        int intensity = image->pixels[i];
+        int intensity = image->pixels[i]; //intensity 0...255
+        //temp, a->L_vectors[128] -> [10000], b->P_vectors [i] -> [10000] -> P_vectors[768][10000]
         bind_hypervectors(temp, L_vectors[intensity], P_vectors[i]);
         bundle_hypervectors(H_out, temp);
     }

@@ -11,8 +11,9 @@
 int P_vectors[WIDTH * HEIGHT][DIMENSION];
 
 void generate_position_hypervectors() {
-    srand(42); // stabil seed
+    srand(42); //seed value.
 
+    //P_vectors[768][10000] -> [+1, -1, +1 ,-1] ...10000 value
     for (int i = 0; i < WIDTH * HEIGHT; i++) {
         // 1 and -1
         int ones_remaining = DIMENSION / 2;

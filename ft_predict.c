@@ -4,17 +4,15 @@
 int predict(const MNIST_Data *image) {
     static int counter = 0;
     printf("⏳ Predicting sample %d (label: %d)\n", counter, image->label);
-    fflush(stdout); // Anında terminale yaz
+    fflush(stdout); 
 
     int H[DIMENSION];
     int H_bin[DIMENSION];
 
-    // Görseli encode et
     encode_image(image, H);
     printf("✅ Encoded image %d\n", counter);
     fflush(stdout);
 
-    // Sign işlemi
     sign_vector(H, H_bin);
     printf("✅ Signed image %d\n", counter);
     fflush(stdout);
@@ -22,7 +20,7 @@ int predict(const MNIST_Data *image) {
     int best_label = -1;
     int best_score = -999999;
 
-    // Sınıf vektörleri ile karşılaştır
+    // dot product
     for (int c = 0; c < 10; c++) {
         int dot = 0;
         for (int i = 0; i < DIMENSION; i++) {

@@ -22,18 +22,17 @@ int main() {
     }
     printf("Loaded %d training samples.\n", train_count);
 
-    // Test verisini yükle
     if (load_mnist_bin("mnist_data/test.bin", &test_data, &test_count) != 0) {
         fprintf(stderr, "Failed to load test data.\n");
         return 1;
     }
     printf("Loaded %d test samples.\n", test_count);
 
-    generate_position_hypervectors();
-    generate_level_hypervectors();
+    generate_position_hypervectors(); //P vector data P[768][10000]
+    generate_level_hypervectors(); //L vector
     printf("passed.\n");
-    
-    train_model(train_data, train_count);
+
+    train_model(train_data, train_count); //class_vectors[10][10000] -> my trained data array
     printf("passed.\n");
     printf("Label 0 vector sample:\n");
     for (int i = 0; i < 20; i++) {
@@ -44,6 +43,7 @@ int main() {
     int correct = 0;
     int test_size = 1000; 
 
+    //
     for (int i = 0; i < test_size; i++) {
         int prediction = predict(&test_data[i]);
         if (prediction == test_data[i].label) {
